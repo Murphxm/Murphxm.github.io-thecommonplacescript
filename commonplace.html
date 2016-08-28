@@ -20,15 +20,17 @@ body {
   font-size: 20px;
 }
 .apred {
+  height: 300px;
   padding: 2px;
   margin-top: 5px;
   margin-bottom: 5px;
   margin-left: auto;
   margin-right: auto;
-  overflow y: auto;
+  overflow-y: auto;
+  overflow y: hidden;
   font-size: 14px;
-  background-color: #e6ffff;
-  box-shadow: 0 0 5px;
+  background-color: #ffffff;
+
 }
 #prepro_status {
   background-color: #FFD;
@@ -51,6 +53,8 @@ body {
 }
 #wrap {
   width: 800px;
+  background-color: #ffe6ff;
+  box-shadow: 0 0 5px;
   margin-right: auto;
   margin-left: auto;
   margin-bottom: 200px;
@@ -62,6 +66,7 @@ body {
 }
 .hh {
   background-color: #EEE;
+  text-align: center;
   padding: 5px;
   margin-top: 5px;
   border-bottom: 1px solid #999;
@@ -99,7 +104,6 @@ var data_sents = [];
 var solver = new R.Solver(); // should be class because it needs memory for step caches
 var pplGraph = new Rvis.Graph();
 var newSentence = [];
-var newSentence_div = [];
 
 
 var model = {};
@@ -199,6 +203,7 @@ var reinit = function() {
   tick_iter = 0;
 
   // process the input, filter out blanks
+  //this is where the input text is first analysed
   var data_sents_raw = $('#ti').val().split('\n');
   data_sents = [];
   for(var i=0;i<data_sents_raw.length;i++) {
@@ -396,7 +401,7 @@ var tick = function() {
   tick_iter += 1;
   //recreation rate
 
-  if(tick_iter % 50 === 0) {
+  if(tick_iter % 20 === 0) {
     // draw samples
     $('#samples').html('');
       //this is the actual sentence
@@ -409,18 +414,17 @@ var tick = function() {
 
 //I need the array to be displayed. And as more sentences are generated I need them to be added to the displayed string.
 //I want all the sentences to be a part of one block of text.
-      for (var i = 0; i < newSentence.length; i++){
-        newSentence_div.push(newSentence[i]);
-      }
 
-      var paragraph = newSentence.join(' ');
-
-      //here's the problem
-      var pred_div = '<div class="apred">' + ' ' + paragraph + '</div>'
+      var paragraph = newSentence.join('. ');
+      //counts the words in the paragraph by analysing the number of spaces
+      var wordCount = (paragraph.match(/ /g)).length;
+      //reinititiates paragraph each check.
+      var pred_div = '<div class="apred">' + ' ' + paragraph + "." + '</div>'
       $('#samples').append(pred_div);
-      //document.write(newSentence.length);
-      //document.write(pred);
-
+      //if word count is greater than 1000, remove the first sentence.
+      if (wordCount > 1000) {
+        newSentence.splice(0, 1);
+      }
   }
 
   /*******************************************************************************************************/
@@ -496,6 +500,7 @@ $(function() {
     }
   });
 
+
   $("#savemodel").click(saveModel);
   $("#loadmodel").click(function(){
     var j = JSON.parse($("#tio").val());
@@ -512,7 +517,6 @@ $(function() {
   });
 
   $("#learn").click(); // simulate click on startup
-
   //$('#gradcheck').click(gradCheck);
 
   $("#temperature_slider").slider({
@@ -532,7 +536,7 @@ $(function() {
 
 <body>
 <div id="wrap">
-  <h1>The Commonplace Script</h1>
+  <h1 style=" text-align: center;">The Commonplace Script</h1>
   <div id="intro">
 
     Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
@@ -541,7 +545,7 @@ $(function() {
   <div>
     <div class="hh">this is where I need to have the output from pdftotext output in order for the user to be able to directly insert one or more pdfs  </div>
 
-    <textarea style="width:100%; height:200px;" id="ti">
+    <textarea style="width:100%; height:200px; display: none;" id="ti" >
 the company has, say, 6 months of runway
 or to put it more brutally, 6 months before they're out of business
 they expect to avoid that by raising more from investors
@@ -1976,13 +1980,7 @@ silicon valley doesn't look like boston, or new york, or la, or dc
     </textarea>
   </div>
 
-
-  <div class="hh">Controls/Options:</div>
-  <button id="learn" class="abutton">learn/restart</button>
-  <button id="resume" class="abutton">resume</button>
-  <button id="stop" class="abutton">pause</button>
-
-  <textarea id="newnet" style="width:100%; height:200px;">
+  <textarea id="newnet" style="width:100%; display: none" >
   // model parameters
   generator = 'lstm'; // can be 'rnn' or 'lstm'
   hidden_sizes = [20,20]; // list of sizes of hidden layers
@@ -1994,23 +1992,16 @@ silicon valley doesn't look like boston, or new york, or la, or dc
   clipval = 5.0; // clip gradients at this value
 </textarea><br/>
 
-  protip: if your perplexity is exploding with Infinity try lowering the initial learning rate
+
   <br>
   <div id="status">
 
     <div>
-      <div class="hh">Training stats:</div>
+      <div class="hh" style="text-align: center;">Learning Rate</div>
       <div class="aslider">
-        <div class="slider_header">Learning rate: you want to anneal this over time if you're training for longer time.</div>
         <div class="theslider" id="lr_slider"></div>
         <div class="slider_value" id="lr_text"></div>
       </div>
-
-
-      <div id="ticktime"></div>
-      <div id="gradclip"></div>
-      <div id="epoch"></div>
-      <div id="ppl"></div>
 
       <div style="clear:both;"></div>
     </div>
@@ -2024,25 +2015,24 @@ silicon valley doesn't look like boston, or new york, or la, or dc
       </div>
     </div>
 
-    //this is where sample text will be written.
+    <!-- this is where sample text will be written. -->
+    <button id="learn" class="abutton">learn/restart</button>
+    <button id="resume" class="abutton">resume</button>
+    <button id="stop" class="abutton">pause</button>
 
     <div id="samples"></div>
 
   </div>
   <div id="io">
-    <div class="hh">I/O save/load model JSON</div>
+    <div class="hh">Save or Load previous models </div>
 
     <button id="savemodel" class="abutton">save model</button>
     <button id="loadmodel" class="abutton">load model</button>
-    <div>
-      You can save or load models with JSON using the textarea below.
-    </div>
+    <button id="loadpretrained" class="abutton">load pretrained</button>
+
     <textarea style="width:100%; height:200px;" id="tio"></textarea>
 
-    <br>
-    <div class="hh">Pretrained model:</div>
-    You can also choose to load an example pretrained model with the button below to see what the predictions look like in later stages. The pretrained model is an LSTM with one layer of 100 units, trained for ~10 hours. After clicking button below you should see the perplexity plummet to about 3.0, and see the predictions become better.<br>
-    <button id="loadpretrained" class="abutton">load pretrained</button>
+
 
   </div>
 </div>
