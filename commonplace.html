@@ -98,6 +98,9 @@ var vocab = [];
 var data_sents = [];
 var solver = new R.Solver(); // should be class because it needs memory for step caches
 var pplGraph = new Rvis.Graph();
+var newSentence = [];
+var newSentence_div = [];
+
 
 var model = {};
 
@@ -391,14 +394,33 @@ var tick = function() {
   /******     this is the section that creates the rules for sentences that are generated    ***********/
 
   tick_iter += 1;
+  //recreation rate
+
   if(tick_iter % 50 === 0) {
     // draw samples
     $('#samples').html('');
-    for(var q=0;q<1;q++) {
+      //this is the actual sentence
       var pred = predictSentence(model, true, sample_softmax_temperature);
-      var pred_div = '<div class="apred">' + pred + '</div>'
+      //this is the creator for the class that calls the sentence
+
+      //this adds the most recent class stats to the "samples" class in order for it to be displayed
+      //I need the sentence array to take the current version of pred(the predicted sentence)
+      newSentence.push(pred);
+
+//I need the array to be displayed. And as more sentences are generated I need them to be added to the displayed string.
+//I want all the sentences to be a part of one block of text.
+      for (var i = 0; i < newSentence.length; i++){
+        newSentence_div.push(newSentence[i]);
+      }
+
+      var paragraph = newSentence.join(' ');
+
+      //here's the problem
+      var pred_div = '<div class="apred">' + ' ' + paragraph + '</div>'
       $('#samples').append(pred_div);
-    }
+      //document.write(newSentence.length);
+      //document.write(pred);
+
   }
 
   /*******************************************************************************************************/
@@ -423,6 +445,7 @@ var tick = function() {
     }
   }
 }
+
 
 var gradCheck = function() {
   var model = initModel();
@@ -512,12 +535,12 @@ $(function() {
   <h1>The Commonplace Script</h1>
   <div id="intro">
 
-    > insert descriptive paragraph here
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
   </div>
   <div>
-    <div class="hh"  /div>
-      //this is where I need to have the output from pdftotext output in order for the user to be able to directly insert one or more pdfs
+    <div class="hh">this is where I need to have the output from pdftotext output in order for the user to be able to directly insert one or more pdfs  </div>
+
     <textarea style="width:100%; height:200px;" id="ti">
 the company has, say, 6 months of runway
 or to put it more brutally, 6 months before they're out of business
@@ -1958,8 +1981,8 @@ silicon valley doesn't look like boston, or new york, or la, or dc
   <button id="learn" class="abutton">learn/restart</button>
   <button id="resume" class="abutton">resume</button>
   <button id="stop" class="abutton">pause</button>
-  <textarea id="newnet" style="width:100%; height:200px;">
 
+  <textarea id="newnet" style="width:100%; height:200px;">
   // model parameters
   generator = 'lstm'; // can be 'rnn' or 'lstm'
   hidden_sizes = [20,20]; // list of sizes of hidden layers
@@ -1967,9 +1990,10 @@ silicon valley doesn't look like boston, or new york, or la, or dc
 
   // optimization
   regc = 0.000001; // L2 regularization strength
-  learning_rate = 0.01; // learning rate
+  learning_rate = 0.005; // learning rate
   clipval = 5.0; // clip gradients at this value
-  </textarea><br />
+</textarea><br/>
+
   protip: if your perplexity is exploding with Infinity try lowering the initial learning rate
   <br>
   <div id="status">
@@ -1982,7 +2006,7 @@ silicon valley doesn't look like boston, or new york, or la, or dc
         <div class="slider_value" id="lr_text"></div>
       </div>
 
-      <canvas id="pplgraph"></canvas>
+
       <div id="ticktime"></div>
       <div id="gradclip"></div>
       <div id="epoch"></div>
