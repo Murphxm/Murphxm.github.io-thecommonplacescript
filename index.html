@@ -7,13 +7,16 @@ body {
   font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
   color: #333;
   margin: 0;
-  background-color: #e0ccff;
+  background-color: #EDE7F6;
 
 }
 h1 {
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
   margin-top: 0;
   margin-bottom: 0;
+  color: #ffffff;
   padding: 20px;
+  background-color: #673AB7;
 }
 #argmax {
   background-color: #DFD;
@@ -28,7 +31,7 @@ h1 {
 }
 .header {
   width: 100%;
-  background-color: #a366ff;
+
   margin-left: auto;
   margin-top: 0;
   margin-right: auto;
@@ -76,15 +79,20 @@ h1 {
   width: 9%;
   display: inline-block;
 }
-
+.slider_header {
+  padding-bottom: 5px
+}
 .abutton {
+  background-color: #4DD0E1;
+  border-radius: 20px;
   width: 120px;
   height: 30px;
   text-align: center;
-  margin: 10px 10px 10px 0px;
+  margin: 10px 10px 10px 10px;
 }
 .hh {
-  background-color: #EEE;
+  color: #ffffff;
+  background-color: #9575CD;
   text-align: center;
   padding: 5px;
   margin-top: 5px;
@@ -95,12 +103,21 @@ h1 {
   float: right;
 }
 #intro {
+  color: #ffffff;
   text-align: justify;
-  padding: 5px;
+  padding: 10px;
   width: 100%;
-  max-width: 900px;
+  max-width: 800px;
   margin-left: auto;
   margin-right: auto;
+  background-color: #9575CD;
+
+}
+.aboutButton {
+  background-color: #FFF9C4;
+  border: 1px solid black;
+  padding: 0;
+  border-radius: 20px;
 }
 </style>
 <link href="external/jquery-ui.min.css" rel="stylesheet">
@@ -564,7 +581,7 @@ $(function() {
   <div class="header">
     <h1 style=" text-align: center;">The Commonplace Script</h1>
     <div id="intro">
-      Through studying my readings about AI, web development, art, psychology and the future. The connections that I found
+      Through studying my readings about AI, web development, art, neuropsychology and the future. The connections that I found
       were most profound were actually the idea of connections.
     </div>
   </div>
@@ -2030,11 +2047,14 @@ silicon valley doesn't look like boston, or new york, or la, or dc
 
   <div id="status" >
 
-
+<div class="hh"> Settings </div>
       <div class="aslider">
-        <div class="slider_header" style="text-align: center;"> Learning Rate: </div>
+        <div class="slider_header" style="text-align: center;"> Learning Rate:
+          <button id="aboutLearningRate" class="aboutButton"> ? </button>
+        </div>
+
         <div class="theslider" id="lr_slider"></div>
-        <div class="slider_value" id="lr_text"></div>
+
 
 
       <div style="clear: both;"></div>
@@ -2042,7 +2062,9 @@ silicon valley doesn't look like boston, or new york, or la, or dc
 
     <div id="controls">
       <div class="aslider">
-        <div class="slider_header" style="text-align: center;"> Logic: <br> low generates more likely predictions, with more repitition. <br> High generates more unique predictions, with more spelling errors</div>
+        <div class="slider_header" style="text-align: center"> Logic:
+        <button id="aboutLogic" class=" aboutButton"> ? </button>
+        </div>
         <div class="theslider" id="temperature_slider"></div>
         <div class="slider_value" id="temperature_text"></div>
       </div>
