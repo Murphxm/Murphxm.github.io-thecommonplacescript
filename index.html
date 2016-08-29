@@ -90,6 +90,8 @@ body {
 }
 #intro {
   text-align: justify;
+  padding: 5px;
+
 }
 </style>
 <link href="external/jquery-ui.min.css" rel="stylesheet">
@@ -553,7 +555,8 @@ $(function() {
   <div class="header">
     <h1 style=" text-align: center;">The Commonplace Script</h1>
     <div id="intro">
-      Through studying my readings about AI, web development,
+      Through studying my readings about AI, web development, art, psychology and the future. The connections that I found
+      were most profound were actually the idea of connections.
     </div>
   </div>
 <div id="wrap">
@@ -569,7 +572,7 @@ $(function() {
     <div class="hh"> Insert text(s) here for analysis:</div>
 
 
-    <textarea style="width:100%; height:100px;" id="ti"  >
+    <textarea style="width:100%; height:100px; resize: none;" id="ti" >
 the company has, say, 6 months of runway
 or to put it more brutally, 6 months before they're out of business
 they expect to avoid that by raising more from investors
@@ -2012,7 +2015,7 @@ silicon valley doesn't look like boston, or new york, or la, or dc
 
   // optimization
   regc = 0.000001; // L2 regularization strength
-  learning_rate = 0.01; // learning rate
+  learning_rate = 0.005; // learning rate
   clipval = 5.0; // clip gradients at this value
   </textarea>
 
@@ -2048,10 +2051,10 @@ silicon valley doesn't look like boston, or new york, or la, or dc
     <button id="loadmodel" class="abutton">load model</button>
     <button id="loadpretrained" class="abutton">load pretrained</button>
 
-    <textarea style="width:100%; height:200px;" id="tio"></textarea>
+    <textarea style="width:100%; height:200px; resize: none;" id="tio"></textarea>
+    <br>
 
-
-
+    <iframe width="100%" height="166" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/280395518%3Fsecret_token%3Ds-ybPc7&amp;color=ff5500&amp;auto_play=false&amp;hide_related=false&amp;show_comments=true&amp;show_user=true&amp;show_reposts=false"></iframe>
   </div>
 </div>
 
